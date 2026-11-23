@@ -1,0 +1,13 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'dev.mainmenu.reload'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'dev.mainmenu.reload'
+        minSdk 26
+        targetSdk 35
+        versionCode 10
+        versionName providers.environmentVariable('RELEASE_TAG').map { it.replaceFirst('^v', '') }.getOrElse('0.1.0')
+    }
+}

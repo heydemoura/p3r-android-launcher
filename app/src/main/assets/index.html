@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://icons.reload.invalid; media-src 'self'; font-src 'self'">
+<title>Reload Home</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="drawer.css">
+<script defer src="transitions.js"></script>
+<script defer src="menu.js"></script>
+<script defer src="drawer.js"></script>
+</head>
+<body>
+<svg class="transition-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id="inkMask" clipPathUnits="objectBoundingBox"><path id="inkShape"/></clipPath>
+    <clipPath id="sceneMask" clipPathUnits="objectBoundingBox"><path id="sceneShape"/><ellipse id="returnTop"/><ellipse id="returnBottom"/></clipPath>
+  </defs>
+</svg>
+<main id="home" class="awaiting-open" aria-label="Home">
+  <div id="water"><video id="motion" muted loop playsinline preload="none"></video><div id="splash" hidden aria-hidden="true"></div></div>
+  <div class="date-card" aria-hidden="true"><strong id="time"></strong><span id="date"></span></div>
+  <button id="surface" aria-label="Open selected app"></button>
+  <div id="liveTrack" class="page-track"><div id="stack" class="menu-stack" role="group" aria-label="Main menu entries"></div></div>
+  <div id="previewTrack" class="page-track" inert aria-hidden="true" hidden><div class="menu-stack"></div></div>
+  <nav id="pager" aria-label="Home pages" hidden>
+    <button id="pagePrev" data-page-step="-1" aria-label="Previous page">‹</button>
+    <span id="pageNumber"></span>
+    <button id="pageNext" data-page-step="1" aria-label="Next page">›</button>
+  </nav>
+  <button id="drawerButton" type="button" hidden>App drawer</button>
+  <button class="aid" id="previous">Previous item</button><button class="aid" id="next">Next item</button>
+  <button class="aid" id="openSystem">Open System settings</button>
+  <div class="guide"><b id="action">Open app</b><small>Command</small><span><span id="swipeHint">Swipe to select · Tap to open</span>Hold for System</span></div>
+  <div id="announcement" class="sr" aria-live="polite"></div>
+</main>
+<main id="system" hidden aria-label="System">
+  <svg class="porthole" viewBox="0 0 400 800" preserveAspectRatio="none" aria-hidden="true">
+    <defs><clipPath id="roomMask"><path d="M-12 -10H410V525C222 618 23 432 -12 114Z"/></clipPath>
+    <path id="arc" d="M-68 154C-30 448 151 677 422 615"/></defs>
+    <rect width="400" height="800" fill="#fafaff"/>
+    <g clip-path="url(#roomMask)"><rect width="400" height="630" fill="#0c1074"/><image href="art/system.webp" x="-400" y="0" width="1000" height="654" preserveAspectRatio="none"/></g>
+    <text fill="#060610" font-size="80" letter-spacing="-5" font-family="Menu, sans-serif"><textPath href="#arc" startOffset="24%">SYSTEM</textPath></text>
+  </svg>
+  <button class="return" data-back data-key="back">‹ Back</button>
+  <section class="system-commands" aria-label="Settings menus">
+    <button class="hub-word" data-key="custom" data-page="custom">Customization</button>
+    <button class="hub-word" data-key="apps" data-page="pages">Apps</button>
+    <button class="hub-word" data-key="drawerSettings" data-page="drawerSettings">App drawer</button>
+  </section>
+  <button class="default" data-key="default" id="defaultHome">Default home app <span>↗</span></button>
+</main>
+<main id="drawer" hidden aria-label="App drawer">
+  <header class="drawer-head"><button class="drawer-back" data-back>‹ Home</button><h1>App drawer</h1></header>
+  <div class="drawer-tools"><label><span aria-hidden="true">⌕</span><input type="search" id="drawerSearch" autocomplete="off" placeholder="Find an app" aria-label="Find an app in the drawer"></label><span id="drawerCount"></span></div>
+  <div class="drawer-body">
+    <div id="drawerScroll"><section id="drawerRecent"><h2>Recently used</h2><div id="recentStrip"></div></section><div id="drawerGroups"></div><div id="drawerSpace" aria-hidden="true"></div></div>
+    <nav id="letterRail" aria-label="Jump to a letter"></nav><output hidden id="letterBubble" aria-hidden="true"></output>
+  </div>
+</main>
+<main id="panel" hidden>
+  <header><button id="panelBack" class="return" data-back data-key="back">‹ System</button><h1 id="panelTitle"></h1></header>
+  <section id="custom" hidden aria-label="Customization">
+    <fieldset><legend>Accent color</legend><div id="swatches"></div>
+    <label class="hex">Custom hex <input data-key="hex" id="hex" type="text" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Custom hex color" placeholder="#FF087C"></label>
+    <p id="colorError" hidden>Enter a six-digit hex color.</p></fieldset>
+    <div id="toggles"></div>
+  </section>
+  <section id="drawerSettings" hidden aria-label="App drawer settings">
+    <button class="option" id="drawerEnabled" data-key="drawerEnabled" role="switch"><span>Enable app drawer</span><span class="flag" aria-hidden="true"></span></button>
+    <button class="option" id="showDrawerButton" data-key="showDrawerButton" role="switch"><span>Show app drawer button on Home</span><span class="flag" aria-hidden="true"></span></button>
+    <button class="option" id="swipeUpDrawer" data-key="swipeUpDrawer" role="switch"><span>Swipe up to open app drawer</span><span class="flag" aria-hidden="true"></span></button>
+    <button class="option" id="recentEnabled" data-key="recentEnabled" role="switch"><span>Show recently used apps</span><span class="flag" aria-hidden="true"></span></button>
+    <label class="option recent-count"><span>Number of recent apps</span><select id="recentLimit" data-key="recentLimit"></select></label>
+    <button id="usageAccess" data-key="usageAccess" class="option"><span>Android usage access</span><span aria-hidden="true">↗</span></button>
+    <p id="recentSource"></p>
+  </section>
+  <section id="pages" hidden aria-label="Home pages">
+    <div class="page-tools"><h2>Home pages</h2><button id="addPage" class="page-action" data-key="add-page">+ Add page</button></div>
+    <div id="pageList"></div>
+  </section>
+  <section id="apps" hidden aria-label="Main menu apps">
+    <div class="apps-tools"><label for="filter">Show on this page</label><span id="count"></span>
+    <div class="page-search"><input data-key="filter" id="filter" type="search" autocomplete="off" placeholder="Find an app" aria-label="Find an app">
+      <button id="removePage" class="page-action" data-key="remove-page">Remove page</button></div></div>
+    <div id="removePrompt" hidden>
+      <strong id="removeQuestion"></strong>
+      <button id="keepPage" class="page-action" data-key="keep-page">Keep page</button>
+      <button id="confirmRemove" class="page-action" data-key="confirm-remove">Remove</button>
+    </div>
+    <div id="appList"></div>
+  </section>
+</main>
+</body></html>

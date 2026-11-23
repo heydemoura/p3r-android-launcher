@@ -1,0 +1,8 @@
+<resources>
+    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">#07165B</item>
+        <item name="android:navigationBarColor">#081450</item>
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
+</resources>
